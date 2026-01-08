@@ -8,9 +8,9 @@
     --paper:#fbf6eb;
     --ochre-gold:#a67c52;
     --ochre-dark:#8f6842;
-    --success-green:#2f7d5a;
-    --warn-orange:#c07a2f;
-    --error-red:#b23b3b;
+    --success:#2f7d5a;
+    --warn:#c07a2f;
+    --error:#b23b3b;
   }
 
   body { background: var(--paper); }
@@ -22,7 +22,7 @@
   .custom-logo{ width:30px; height:30px; border-radius:8px; }
   .custom-header h1{ margin:0; font-size:1.1rem; letter-spacing:.2px; color:var(--ink); }
 
-  .result-container{
+  .card{
     max-width:760px;
     margin:36px auto;
     padding:34px;
@@ -31,26 +31,26 @@
     border-radius:18px;
     box-shadow:0 10px 25px rgba(0,0,0,.05);
   }
-  .result-title{ font-size:2rem; font-weight:800; margin:0 0 14px; }
-  .status-success{ color:var(--success-green); }
-  .status-pending{ color:var(--warn-orange); }
-  .status-failed{ color:var(--error-red); }
 
-  .result-desc{
-    font-size:1.05rem; line-height:1.8; color:#555; margin:0 0 26px;
-  }
-  .info-box{
+  .title{ font-size:2rem; font-weight:800; margin:0 0 14px; }
+  .ok{ color:var(--success); }
+  .pending{ color:var(--warn); }
+  .bad{ color:var(--error); }
+
+  .desc{ font-size:1.05rem; line-height:1.8; color:#555; margin:0 0 26px; }
+
+  .info{
     background:#fafafa;
     border-radius:12px;
     padding:20px;
     margin:0 0 28px;
     font-size:.95rem;
   }
-  .info-row{ display:flex; justify-content:space-between; padding:6px 0; gap:12px; }
-  .info-row span:first-child{ color:#777; white-space:nowrap; }
-  .info-row span:last-child{ color:#222; overflow-wrap:anywhere; text-align:right; }
+  .row{ display:flex; justify-content:space-between; padding:6px 0; gap:12px; }
+  .row span:first-child{ color:#777; white-space:nowrap; }
+  .row span:last-child{ color:#222; overflow-wrap:anywhere; text-align:right; }
 
-  .btn-primary{
+  .btn{
     display:inline-block;
     background-color:var(--ochre-gold);
     color:#fff;
@@ -64,11 +64,12 @@
     transition:all .25s ease;
     box-shadow:0 4px 15px rgba(166,124,82,.25);
   }
-  .btn-primary:hover{ background-color:var(--ochre-dark); transform:translateY(-2px); }
+  .btn:hover{ background-color:var(--ochre-dark); transform:translateY(-2px); }
 
   @media (max-width: 768px) {
     .custom-header { padding: 14px 20px; }
-    .result-container { margin: 20px; padding: 24px; }
+    .card { margin: 20px; padding: 24px; }
+    .btn{ width:100%; padding:14px 0; }
   }
 </style>
 
@@ -77,47 +78,56 @@
   <h1>Papers</h1>
 </div>
 
-<div class="result-container">
+<div class="card">
 
   {% if status == "paid" %}
-    <h1 class="result-title status-success">付款成功</h1>
-    <p class="result-desc">我們已確認您的付款，文件已準備完成，請點擊下方按鈕下載。</p>
+    <h1 class="title ok">付款成功</h1>
+    {% if download_url %}
+      <p class="desc">我們已確認您的付款，文件已準備完成，請點擊下方按鈕下載。</p>
+    {% else %}
+      <p class="desc">我們已確認您的付款。接下來將依此 App 的交付流程完成內容提供。</p>
+      {# TODO: 若你的 app 一定要有下載，請在後端產出檔案到 GENERATED_FILES_PATH，便會自動出現下載按鈕 #}
+    {% endif %}
 
   {% elif status == "pending" %}
-    <h1 class="result-title status-pending">付款確認中</h1>
-    <p class="result-desc">我們正在向金流系統確認您的付款狀態，請稍候重新整理此頁面。</p>
+    <h1 class="title pending">付款確認中</h1>
+    <p class="desc">我們正在向金流系統確認您的付款狀態，請稍候重新整理此頁面。</p>
 
   {% elif status == "internal_error" %}
-    <h1 class="result-title status-failed">系統處理中</h1>
-    <p class="result-desc">付款已完成，但文件尚在生成或暫時發生錯誤。請稍後重新整理，或返回付款資訊再試一次。</p>
+    <h1 class="title bad">系統處理中</h1>
+    <p class="desc">付款已完成，但系統正在處理交付流程或暫時發生錯誤。請稍後重新整理，或返回付款資訊再試。</p>
+
+  {% elif status == "not_found" %}
+    <h1 class="title bad">查無訂單</h1>
+    <p class="desc">找不到此筆交易編號的訂單，請返回付款資訊重新操作。</p>
 
   {% else %}
-    <h1 class="result-title status-failed">付款未完成</h1>
-    <p class="result-desc">此筆交易未成功，您尚未被扣款，如有需要請重新嘗試付款。</p>
+    <h1 class="title bad">付款未完成</h1>
+    <p class="desc">此筆交易未成功，您尚未被扣款，如有需要請重新嘗試付款。</p>
   {% endif %}
 
-  <div class="info-box">
+  <div class="info">
     {% if merchant_trade_no %}
-    <div class="info-row"><span>交易編號</span><span>{{ merchant_trade_no }}</span></div>
+      <div class="row"><span>交易編號</span><span>{{ merchant_trade_no }}</span></div>
     {% endif %}
     {% if amount %}
-    <div class="info-row"><span>付款金額</span><span>{{ amount }} 元</span></div>
+      <div class="row"><span>付款金額</span><span>{{ amount }} 元</span></div>
     {% endif %}
     {% if payment_type %}
-    <div class="info-row"><span>付款方式</span><span>{{ payment_type }}</span></div>
+      <div class="row"><span>付款方式</span><span>{{ payment_type }}</span></div>
     {% endif %}
     {% if rtn_code %}
-    <div class="info-row"><span>狀態碼</span><span>{{ rtn_code }}</span></div>
+      <div class="row"><span>狀態碼</span><span>{{ rtn_code }}</span></div>
     {% endif %}
     {% if rtn_msg %}
-    <div class="info-row"><span>交易訊息</span><span>{{ rtn_msg }}</span></div>
+      <div class="row"><span>交易訊息</span><span>{{ rtn_msg }}</span></div>
     {% endif %}
   </div>
 
-  {% if status == "paid" and token %}
-    <a href="{{ url_for('ecpay.download', token=token) }}" class="btn-primary">下載專屬章程</a>
+  {% if status == "paid" and download_url %}
+    <a href="{{ download_url }}" class="btn">下載專屬章程</a>
   {% else %}
-    <a href="{{ template_form_url or url_for('main.price') }}" class="btn-primary">返回付款資訊</a>
+    <a href="{{ template_form_url }}" class="btn">返回付款資訊</a>
   {% endif %}
 
 </div>
