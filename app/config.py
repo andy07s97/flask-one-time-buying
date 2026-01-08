@@ -18,7 +18,7 @@ def load_config(app):
     app.config["GENERATED_FILES_PATH"] = os.getenv("GENERATED_FILES_PATH", "/opt/<app>/generated")
     app.config["ADMIN_TOKEN"] = os.getenv("ADMIN_TOKEN", "")
     app.config["APP_CODE"] = os.getenv("APP_CODE")
-    app.config["APP_TRADE_NO_PREFIX=CT"] = os.getenv("APP_TRADE_NO_PREFIX=CT")
+    app.config["APP_TRADE_NO_PREFIX"] = os.getenv("APP_TRADE_NO_PREFIX", "CT")
 
     # === ECpay variables ===
     app.config["ECPAY_MERCHANT_ID"] = os.getenv("ECPAY_MERCHANT_ID")
