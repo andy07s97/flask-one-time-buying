@@ -17,6 +17,8 @@ def load_config(app):
     app.config["TEMPLATE_REPO_PATH"] = os.getenv("TEMPLATE_REPO_PATH", "")
     app.config["GENERATED_FILES_PATH"] = os.getenv("GENERATED_FILES_PATH", "/opt/<app>/generated")
     app.config["ADMIN_TOKEN"] = os.getenv("ADMIN_TOKEN", "")
+    app.config["APP_CODE"] = os.getenv("APP_CODE")
+    app.config["APP_TRADE_NO_PREFIX=CT"] = os.getenv("APP_TRADE_NO_PREFIX=CT")
 
     # === ECpay variables ===
     app.config["ECPAY_MERCHANT_ID"] = os.getenv("ECPAY_MERCHANT_ID")
@@ -30,12 +32,12 @@ def load_config(app):
 
     app.config["ECPAY_SDK_PATH"] = os.getenv("ECPAY_SDK_PATH")
     app.config["GENERATED_FILES_PATH"] = os.getenv("GENERATED_FILES_PATH","/opt/<app>/generated")
-
+    app.config["ECPAY_CHOOSE_PAYMENT"] = os.getenv("ECPAY_CHOOSE_PAYMENT")
+    
     # Database (absolute path, production-safe)
     db_url = os.getenv("DATABASE_URL")
     if not db_url:
         raise RuntimeError("DATABASE_URL is not set")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
