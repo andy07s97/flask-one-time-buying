@@ -16,6 +16,9 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # ✅ 必要：確保 models 被載入，讓 db.metadata 看到所有 tables
+    from . import models 
+
     # Blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
