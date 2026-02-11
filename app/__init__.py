@@ -20,6 +20,7 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(api_bp)
-    app.register_blueprint(ecpay_bp)
+    # 寫好ecpay.py再加回來
+    # app.register_blueprint(ecpay_bp)
 
     return app
