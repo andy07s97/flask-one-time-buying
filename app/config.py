@@ -31,7 +31,6 @@ def load_config(app):
     app.config["ECPAY_NOTIFY_URL"] = os.getenv("ECPAY_NOTIFY_URL")
 
     app.config["ECPAY_SDK_PATH"] = os.getenv("ECPAY_SDK_PATH")
-    app.config["GENERATED_FILES_PATH"] = os.getenv("GENERATED_FILES_PATH","/opt/<app>/generated")
     app.config["ECPAY_CHOOSE_PAYMENT"] = os.getenv("ECPAY_CHOOSE_PAYMENT")
     
     # Database (absolute path, production-safe)
