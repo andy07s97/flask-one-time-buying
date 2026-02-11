@@ -23,7 +23,7 @@ from flask import (
 )
 
 from ..extensions import db
-from ..models import DownloadToken, Order, utcnow
+# from ..models import DownloadToken, Order, utcnow
 
 ecpay_bp = Blueprint("ecpay", __name__, url_prefix="/ecpay")
 
