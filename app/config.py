@@ -14,8 +14,6 @@ def load_config(app):
 
     # Security
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-change-me")
-    app.config["TEMPLATE_REPO_PATH"] = os.getenv("TEMPLATE_REPO_PATH", "")
-    app.config["GENERATED_FILES_PATH"] = os.getenv("GENERATED_FILES_PATH", "/opt/<app>/generated")
     app.config["ADMIN_TOKEN"] = os.getenv("ADMIN_TOKEN", "")
     app.config["APP_CODE"] = os.getenv("APP_CODE")
     app.config["APP_TRADE_NO_PREFIX"] = os.getenv("APP_TRADE_NO_PREFIX", "CT")
