@@ -35,9 +35,6 @@ def load_config(app):
     app.config["ECPAY_CHOOSE_PAYMENT"] = os.getenv("ECPAY_CHOOSE_PAYMENT")
     
     # Database (absolute path, production-safe)
-    db_url = os.getenv("DATABASE_URL")
-    if not db_url:
-        raise RuntimeError("DATABASE_URL is not set")
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+    app.config["DATABASE_URL"] = os.getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
