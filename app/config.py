@@ -33,5 +33,3 @@ def load_config(app):
     
     # Database (absolute path, production-safe)
     app.config["DATABASE_URL"] = os.getenv("DATABASE_URL")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
